@@ -20,3 +20,7 @@ DO NOT ALTER THE DATABASE TEXT FILE. DOING SO WILL BREAK MANGAMINE. ALTER ONLY A
 For the MangaBotDownloader.py:
 
   This is a Bot that will automatically download all the chapters to manga you specify in the lists. It will run 5 times over a 10 hour period (Not including time spent downloading manga. The first time through may take a while since it will download every chapter, from there it will not redownload each chapter/page but update if any new chapters have been uploaded). Then it will sleep for 1 week. Then it will repeat the process to keep manga up to date.
+  
+For the Sub_Folder:
+
+  This folder contains 3 python files that are the individual functions that download from a speicifc site. This is how we built this Main MangaMine program. We started with individual functions/programs that download from one site then merged them altogether with more options and commands. 
