@@ -15,3 +15,8 @@ For the MangaDatabaseIntializer.py:
   This utility is meant to be run weekly, biweekly or once a month to keep an updated list of all manga for each website available to use instead of haing to find and copy and paste links yourself.
 
 DO NOT ALTER THE DATABASE TEXT FILE. DOING SO WILL BREAK MANGAMINE. ALTER ONLY AT YOUR OWN RISK.
+
+
+For the MangaBotDownloader.py:
+
+  This is a Bot that will automatically download all the chapters to manga you specify in the lists. It will run 5 times over a 10 hour period (Not including time spent downloading manga. The first time through may take a while since it will download every chapter, from there it will not redownload each chapter/page but update if any new chapters have been uploaded). Then it will sleep for 1 week. Then it will repeat the process to keep manga up to date.
