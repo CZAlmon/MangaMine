@@ -1180,6 +1180,11 @@ def MangaStream(link_to_manga_site):
         chapter_url = chapter_url_list[0]
 
         for j in range(number_of_pages):
+            
+            if j == 0:
+                numOfFileInCWD = len([name for name in os.listdir('.') if os.path.isfile(name)])
+                if numOfFileInCWD == number_of_pages:
+                    break
 
             print("Downloading Page %d" % (j+1), end="", flush=True)
             print("\r", end="", flush=True)
