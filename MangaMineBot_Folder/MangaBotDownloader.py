@@ -13,7 +13,7 @@ import time
 platformType = platform.system()
 
 #To add more items to any list
-#'', '', '', '', '', '', '', '', 
+#'', '', '', '', '', '', '', '', '', 
 
 
 def Batoto(link_to_manga_site):
