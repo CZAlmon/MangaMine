@@ -1,4 +1,4 @@
-#Ver. 0.1.0
+#Ver. 0.1.5
 #Authors: Dylan Wise & Zach Almon
 
 import urllib.request
@@ -414,7 +414,7 @@ def main():
                     break
                 except:
                     print()
-                    print('Invalid URL!')
+                    print('Invalid URL or connection Timeout')
                     print('Please Try Again')
 
         else:
@@ -438,7 +438,7 @@ def main():
 
                 except:
                     print()
-                    print('Invalid URL!')
+                    print('Invalid URL or connection Timeout')
 
 
 
@@ -455,7 +455,7 @@ def main():
 
             except:
                 print('Invalid URL!')
-                return 1
+                return
 
             #Python 3.4 Converts '&amp;' Type things to their string equivalent. 
             directorySafeName = html.unescape(directorySafeName)
@@ -513,9 +513,62 @@ def main():
                                                 
                     for i in range(len(allChaps)):
 
+                        #This code block is to extract the Vol and Chapter numbers
+                        #From the URL. It is a pain but needed.
+                        #This code block is also used later on.
+
+                        skipBool1 = False
+                        skipBool2 = False
+                        volChapDirectoryString = ""
+
+                        findVolume = re.findall(r'v\d{2}.\d+' , allChaps[i])
+                        findChap = re.findall(r'c\d{3}.\d+' , allChaps[i])
+                
+                        if len(findVolume) == 0:
+                            findVolume = re.findall(r'v\d{2}', allChaps[i])
+
+                            try:
+                                volTempString = re.findall(r'\d{2}', findVolume[0])
+
+                            except:
+                                skipBool1 = True
+                    
+                            if skipBool1 == False:
+                                volTempString = str(int(volTempString[0]))
+                                volChapDirectoryString = volChapDirectoryString + 'Vol. ' + volTempString + ' '
+
+                        else:
+                            volTempString = re.findall(r'\d{2}.\d+', findVolume[-1])
+                            volTempString = str(float(volTempString[0]))
+                            volChapDirectoryString = volChapDirectoryString + 'Vol. ' + volTempString + ' '
+
+                        if len(findChap) == 0:
+                            findChap = re.findall(r'c\d{3}', allChaps[i])
+
+                            try:
+                                chapTempString = re.findall(r'\d{3}', findChap[0])
+
+                            except:
+                                skipBool2 = True
+
+                            if skipBool2 == False:
+                                chapTempString = str(int(chapTempString[0]))
+                                volChapDirectoryString = volChapDirectoryString + 'Chap. ' + chapTempString
+
+                        else:
+                            chapTempString = re.findall(r'\d{3}.\d+', findChap[-1])
+                            chapTempString = str(float(chapTempString[0]))
+                            volChapDirectoryString = volChapDirectoryString + 'Chap. ' + chapTempString
+
+                        if volChapDirectoryString == "":
+                            print('An error has occured getting chapter or volume number!')
+                            return
+
+
+
                         #Plus one here So there will be a minus one later!!!
-                        print('Number ' + str(i+1) + ' ' + allChaps[i])
-                        #Also fix allChaps[i] because that will be a link to the chapter not the name/number
+                        print('Number ' + str(i+1) + ' ' + volChapDirectoryString)
+                        
                             
                         if i % 50 == 49 or (i == (len(allChaps) - 1)):
                                 
@@ -531,17 +584,16 @@ def main():
 
                                 if search_input.isdigit():
 
-                                    if int(search_input) > 0 and int(search_input) < len(allChaps):
-                                        print('Your choice is: ' + allChaps[int(search_input)-1], end='\n\n')
+                                    if int(search_input) > 0 and int(search_input) <= len(allChaps):
                                         custom_start = True
                                         place_to_start_from_index = (int(search_input) - 1) #Subtract one for the option before
                                         search_found_bool = True
                                         break
                                 
                                     else:
-                                        print('Your choice needs to be greater then 0 and less then ' + str(len(allChaps)))
+                                        length_of_list = len(allChaps)
+                                        print('Your choice needs to be greater then 0 and less then ' + str(int(length_of_list)+1))
                                 
-
                                 elif search_input == 'n':
                                     print('\nThe next 50 manga:\n')
                                     break
@@ -595,9 +647,61 @@ def main():
                                                 
                                     for i in range(len(allChaps)):
 
+                                        #This code block is to extract the Vol and Chapter numbers
+                                        #From the URL. It is a pain but needed.
+                                        #This code block is also used later on.
+
+                                        skipBool1 = False
+                                        skipBool2 = False
+                                        volChapDirectoryString = ""
+
+                                        findVolume = re.findall(r'v\d{2}.\d+' , allChaps[i])
+                                        findChap = re.findall(r'c\d{3}.\d+' , allChaps[i])
+                
+                                        if len(findVolume) == 0:
+                                            findVolume = re.findall(r'v\d{2}', allChaps[i])
+
+                                            try:
+                                                volTempString = re.findall(r'\d{2}', findVolume[0])
+
+                                            except:
+                                                skipBool1 = True
+                    
+                                            if skipBool1 == False:
+                                                volTempString = str(int(volTempString[0]))
+                                                volChapDirectoryString = volChapDirectoryString + 'Vol. ' + volTempString + ' '
+
+                                        else:
+                                            volTempString = re.findall(r'\d{2}.\d+', findVolume[-1])
+                                            volTempString = str(float(volTempString[0]))
+                                            volChapDirectoryString = volChapDirectoryString + 'Vol. ' + volTempString + ' '
+
+                                        if len(findChap) == 0:
+                                            findChap = re.findall(r'c\d{3}', allChaps[i])
+
+                                            try:
+                                                chapTempString = re.findall(r'\d{3}', findChap[0])
+
+                                            except:
+                                                skipBool2 = True
+
+                                            if skipBool2 == False:
+                                                chapTempString = str(int(chapTempString[0]))
+                                                volChapDirectoryString = volChapDirectoryString + 'Chap. ' + chapTempString
+
+                                        else:
+                                            chapTempString = re.findall(r'\d{3}.\d+', findChap[-1])
+                                            chapTempString = str(float(chapTempString[0]))
+                                            volChapDirectoryString = volChapDirectoryString + 'Chap. ' + chapTempString
+
+                                        if volChapDirectoryString == "":
+                                            print('An error has occured getting chapter or volume number!')
+                                            return
+
+
+
                                         #Plus one here So there will be a minus one later!!!
-                                        print('Number ' + str(i+1) + ' ' + allChaps[i])
-                                        #Also fix allChaps[i] because that will be a link to the chapter not the name/number
+                                        print('Number ' + str(i+1) + ' ' + volChapDirectoryString)
                             
                                         if i % 50 == 49 or (i == (len(allChaps) - 1)):
                                 
@@ -613,15 +717,15 @@ def main():
 
                                                 if search_input.isdigit():
 
-                                                    if int(search_input) >= (place_to_start_from_index + 1) and int(search_input) < len(allChaps):
-                                                        print('Your choice is: ' + allChaps[int(search_input)-1], end='\n\n')
+                                                    if int(search_input) >= (place_to_start_from_index + 1) and int(search_input) <= len(allChaps):
                                                         custom_end = True
                                                         place_to_end_at_index = (int(search_input) - 1) #Subtract one for the option before
                                                         search_found_bool = True
                                                         break
                                 
                                                     else:
-                                                        print('Your choice needs to be greater then ' +  str(place_to_start_from_index) + ' and less then ' + str(len(allChaps)))
+                                                        length_of_list = len(allChaps)
+                                                        print('Your choice needs to be greater then ' +  str(place_to_start_from_index + 1) + ' and less then ' + str(int(length_of_list)+1))
                                 
 
                                                 elif search_input == 'n':
@@ -657,6 +761,9 @@ def main():
                             elif continueChoiceCustomChap == 'n':
                                 break
 
+                            elif continueChoiceCustomChap == 'q':
+                                return
+
                             else:
                                 print('Invalid Option!')
 
@@ -665,12 +772,19 @@ def main():
                         #and the manga will download from the start until absolute end of manga
                         break
 
+                    else:
+                        print('No chapter Detected. Please try again.\n\n')
+
 
                 #After if statement      
 
                 elif continueChoiceFullDownload == 'y':
                     fullDownload = True
                     break
+
+                elif continueChoiceFullDownload == 'q':
+                    return
+
                 else:
                     print('Invalid Option!')
 
@@ -765,7 +879,7 @@ def main():
 
                 if volChapDirectoryString == "":
                     print('An error has occured getting chapter or volume number!')
-                    return 1
+                    return
 
                 print('Downloading', volChapDirectoryString)
 
@@ -784,7 +898,15 @@ def main():
                 
                 urllibIMG = str(urllib.request.urlopen(i).read())
                 trimHTML = re.findall('<select id="top_chapter_list"(.*?)read_img', urllibIMG)
-                allPageURLs = re.findall('<option value="(.*?)" ', trimHTML[-1])
+
+                try:
+                    allPageURLs = re.findall('<option value="(.*?)" ', trimHTML[-1])
+
+                except:
+                    print('Something went wrong when trying to find the page URL\'s!')
+                    print('This manga cannot be downloaded at this time.')
+                    return
+                
                 
                 for k in allPageURLs:
                     currentPage += 1
@@ -828,5 +950,22 @@ def main():
                             fout = open(imageName, 'wb')       
                             fout.write(rawImage)                          
                             fout.close()
+        
+        while True:
+
+            print('Do you want to download another manga from MangaHere?')
+            print('[y/n]')
+
+            Continue_or_not = input('')
+
+            if Continue_or_not == 'y':
+                break
+
+            elif Continue_or_not == 'n':
+                return
+
+            else:
+                print('Invalid choice!')
+                print()
    
 main()
