@@ -1239,13 +1239,7 @@ def MangaStream(link_to_manga_site):
     return
 
 
-#Adjust these 4 functions to accept a link to download that link
 #FULL DOWNLOAD. NO OPTIONS. THIS IS A BOT TO RUN 24/7 TO CHECK FOR UPDATES
-
-#Batoto Done
-#Panda Done
-#here Done
-
 
 def main():
 
@@ -1275,7 +1269,7 @@ def main():
 
     counter = 0
 
-  #File these lists with the top page for each manga to thier respective website
+  #File these lists with the top page for each manga to their respective website
   #Ex. 1: http://bato.to/comic/_/comics/seto-no-hanayome-r385
   #Ex. 2: http://www.mangapanda.com/372/seto-no-hanayome
   #Ex. 3: http://www.mangahere.co/manga/seto_no_hanayome/
@@ -1343,5 +1337,8 @@ def main():
 
 
 main()
+
+
+#To See any error/error code wait before the program exits completely
 
 time.sleep(15)
