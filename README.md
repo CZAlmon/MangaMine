@@ -25,4 +25,4 @@ For the MangaBotDownloader.py:
   
 For the Sub_Folder:
 
-  This folder contains 3 python files that are the individual functions that download from a speicifc site. This is how we built this Main MangaMine program. We started with individual functions/programs that download from one site then merged them altogether with more options and commands. 
+  This folder contains 4 python files that are the individual functions that download from a speicifc site. This is how we built this Main MangaMine program. We started with individual functions/programs that download from one site then merged them altogether with more options and commands. 
