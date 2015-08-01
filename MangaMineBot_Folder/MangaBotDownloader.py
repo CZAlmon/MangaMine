@@ -13,7 +13,7 @@ import time
 platformType = platform.system()
 
 #To add more items to any list
-#'', '', '', '', '', '', '', '', '', 
+#'', '', '', '', '', '', '', '', 
 
 
 def Batoto(link_to_manga_site):
@@ -912,7 +912,14 @@ def MangaHere(link_to_manga_site):
 
 
         trimHTML = re.findall('<select id="top_chapter_list"(.*?)read_img', urllibIMG)
-        allPageURLs = re.findall('<option value="(.*?)" ', trimHTML[-1])
+
+        try:
+            allPageURLs = re.findall('<option value="(.*?)" ', trimHTML[-1])
+
+        except:
+            print('Something went wrong when trying to find the page URL\'s!')
+            print('This manga cannot be downloaded at this time.')
+            return
                 
         for k in allPageURLs:
             currentPage += 1
@@ -1180,7 +1187,7 @@ def MangaStream(link_to_manga_site):
         chapter_url = chapter_url_list[0]
 
         for j in range(number_of_pages):
-            
+
             if j == 0:
                 numOfFileInCWD = len([name for name in os.listdir('.') if os.path.isfile(name)])
                 if numOfFileInCWD == number_of_pages:
@@ -1241,6 +1248,8 @@ def MangaStream(link_to_manga_site):
 
 #FULL DOWNLOAD. NO OPTIONS. THIS IS A BOT TO RUN 24/7 TO CHECK FOR UPDATES
 
+
+
 def main():
 
     #Time Run 5 Times over a ten hour period, once every 2 hours.
@@ -1269,12 +1278,6 @@ def main():
 
     counter = 0
 
-  #File these lists with the top page for each manga to their respective website
-  #Ex. 1: http://bato.to/comic/_/comics/seto-no-hanayome-r385
-  #Ex. 2: http://www.mangapanda.com/372/seto-no-hanayome
-  #Ex. 3: http://www.mangahere.co/manga/seto_no_hanayome/
-  #Ex. 4: http://mangastream.com/manga/one_piece
-  
     batoto_manga = []
 
     mangahere_manga = []
@@ -1319,12 +1322,12 @@ def main():
         counter += 1
 
         if counter < 5:
-            print('Sleeping for 2 Hours.\n')
+            print('\n\nSleeping for 2 Hours.\n')
             time.sleep(7200)
 
         else:
             counter = 0
-            print('Sleeping for 1 Week.\n')
+            print('\n\nSleeping for 1 Week.\n')
             time.sleep(604800)
 
 
@@ -1337,7 +1340,6 @@ def main():
 
 
 main()
-
 
 #To See any error/error code wait before the program exits completely
 
