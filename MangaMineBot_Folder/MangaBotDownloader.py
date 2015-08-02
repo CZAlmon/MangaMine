@@ -12,9 +12,6 @@ import time
 
 platformType = platform.system()
 
-#To add more items to any list
-#'', '', '', '', '', '', '', '', 
-
 
 def Batoto(link_to_manga_site):
 
@@ -1249,7 +1246,6 @@ def MangaStream(link_to_manga_site):
 #FULL DOWNLOAD. NO OPTIONS. THIS IS A BOT TO RUN 24/7 TO CHECK FOR UPDATES
 
 
-
 def main():
 
     #Time Run 5 Times over a ten hour period, once every 2 hours.
@@ -1274,9 +1270,12 @@ def main():
 
     Main_Directory = os.getcwd()
 
-
-
     counter = 0
+    
+    
+    #To add more items to any list
+    #'', '', '', '', '', '', '', '', 
+
 
     batoto_manga = []
 
