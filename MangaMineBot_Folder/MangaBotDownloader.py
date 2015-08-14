@@ -1,4 +1,4 @@
-#Ver. 0.0.5
+#Ver. 0.0.7
 #Author: Zach Almon
 
 import urllib.request
@@ -59,6 +59,7 @@ def Batoto(link_to_manga_site):
                     urllibHTML = urllib.request.urlopen(link_to_manga_site).read()
                 except:
                     print('Request 4 Failed. Moving onto the Next manga.')
+                    print('This was the First Main Request that Failed.')
                     return
     
         
@@ -128,6 +129,7 @@ def Batoto(link_to_manga_site):
                         First_chapter_html = urllib.request.urlopen(First_chapter_address_string).read()
                     except:
                         print('Request 4 Failed. Moving onto the Next manga.')
+                        print('This was the Second Main Request that Failed.')
                         return
         
         
@@ -296,6 +298,7 @@ def Batoto(link_to_manga_site):
                             urllibHTML = urllib.request.urlopen(list_of_Chapter_Links_Final[i]).read()
                         except:
                             print('Request 4 Failed. Moving onto the Next manga.')
+                            print('This was the Chapter Request that Failed.')
                             return
             
                             
@@ -327,6 +330,8 @@ def Batoto(link_to_manga_site):
                     #If file does not already exist, opens a file, writes image binary data to it and closes
                     if fileExists == False:
 
+                        image_worked = True
+
                         try:
                             rawImage = urllib.request.urlopen(image_file_name).read()
                         except:
@@ -348,12 +353,19 @@ def Batoto(link_to_manga_site):
                                     try:
                                         rawImage = urllib.request.urlopen(image_file_name).read()
                                     except:
-                                        print('Request 4 Failed. Moving onto the Next manga.')
-                                        return
+                                        print('Request 4 Failed. Moving onto the Next image.')
+                                        image_worked = False
                         
-                        fout = open(imageName, 'wb')       
-                        fout.write(rawImage)                          
-                        fout.close()
+                        if image_worked:
+                            fout = open(imageName, 'wb')       
+                            fout.write(rawImage)                          
+                            fout.close()
+
+                    #   I will leave this here in case you feel the need to slow down your requests to the website/server
+                    # just incase something bad could happen. All you need to do is delete the # 3 lines below  
+                    # and the program will sleep for 2 seconds after each page is downloaded. You can add more time if you wish
+                    #
+                    #time.sleep(2)
                             
             elif type_two_manga == True:
                 #Get the pages between "<id..." and "</se..."
@@ -411,6 +423,7 @@ def Batoto(link_to_manga_site):
                                         page_urllibHTML = urllib.request.urlopen(list_of_page_links_final[j]).read()
                                     except:
                                         print('Request 4 Failed. Moving onto the Next manga.')
+                                        print('This was the Page Request that Failed.')
                                         return
                         
 
@@ -426,6 +439,8 @@ def Batoto(link_to_manga_site):
 
                     #If file does not already exist, opens a file, writes image binary data to it and closes
                     if fileExists == False:
+
+                        image_worked = True
 
                         try:
                             rawImage = urllib.request.urlopen(image_file_name).read()
@@ -448,12 +463,19 @@ def Batoto(link_to_manga_site):
                                     try:
                                         rawImage = urllib.request.urlopen(image_file_name).read()
                                     except:
-                                        print('Request 4 Failed. Moving onto the Next manga.')
-                                        return
+                                        print('Request 4 Failed. Moving onto the Next image.')
+                                        image_worked = False
 
-                        fout = open(imageName, 'wb')       
-                        fout.write(rawImage)                          
-                        fout.close()
+                        if image_worked:
+                            fout = open(imageName, 'wb')       
+                            fout.write(rawImage)                          
+                            fout.close()
+                    
+                    #   I will leave this here in case you feel the need to slow down your requests to the website/server
+                    # just incase something bad could happen. All you need to do is delete the # 3 lines below  
+                    # and the program will sleep for 2 seconds after each page is downloaded. You can add more time if you wish
+                    #
+                    #time.sleep(2)
 
             else:
                 print("Manga Type Error!")
@@ -499,6 +521,7 @@ def MangaPanda(link_to_manga_site):
                     urllibHTML = urllib.request.urlopen(link_to_manga_site).read()
                 except:
                     print('Request 4 Failed. Moving onto the Next manga.')
+                    print('This was the First Main Request that Failed.')
                     return
 
             
@@ -642,8 +665,10 @@ def MangaPanda(link_to_manga_site):
                             urllibHTML = urllib.request.urlopen(chapURL).read()
                         except:
                             print('Request 4 Failed. Moving onto the Next manga.')
+                            print('This was the Chapter Request that Failed.')
                             return
 
+           
 
             if isFirstLoopPage == True:
                 determineAmountOfPages = re.findall('<option value="+(.*?)\</option>', str(urllibHTML))
@@ -659,6 +684,11 @@ def MangaPanda(link_to_manga_site):
                 if numOfFileInCWD == len(determineAmountOfPages):
                     break
                         
+
+            #Waiting till next request. MangaPanda doesn't like alot of requests in a short time period.
+            time.sleep(1)
+
+
             #grabs both the next page URL and the URL for the image on the current page
             URLandIMG = re.findall(r'<div id="imgholder">+(.*?)\" name=+', str(urllibHTML))
             nextPageURL = re.findall(r'<a href="+(.*?)\">', URLandIMG[0])
@@ -679,36 +709,56 @@ def MangaPanda(link_to_manga_site):
             #If file does not already exist, opens a file, writes image binary data to it and closes
             if fileExists == False:
 
+                image_worked = True
+
+                user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
+
+                url = imageURL[0]
+
+                headers={'User-Agent':user_agent,} 
+
+                request = urllib.request.Request(url,None,headers)
+                
+
                 try:
-                    rawImage = urllib.request.urlopen(imageURL[0]).read()
+                    rawImage = urllib.request.urlopen(request).read()
                 except:
-                    print('Request 1 Failed. Trying again in 30 seconds.')
-                    time.sleep(30)
+                    print('Request 1 Failed. Trying again in 10 seconds.')
+                    time.sleep(10)
 
                     try:
-                        rawImage = urllib.request.urlopen(imageURL[0]).read()
+                        rawImage = urllib.request.urlopen(request).read()
                     except:
-                        print('Request 2 Failed. Trying again in 30 seconds.')
-                        time.sleep(30)
+                        print('Request 2 Failed. Trying again in 10 seconds.')
+                        time.sleep(10)
 
                         try:
-                            rawImage = urllib.request.urlopen(imageURL[0]).read()
+                            rawImage = urllib.request.urlopen(request).read()
                         except:
-                            print('Request 3 Failed. Trying again in 30 seconds.')
-                            time.sleep(30)
+                            print('Request 3 Failed. Trying again in 10 seconds.')
+                            time.sleep(10)
 
                             try:
-                                rawImage = urllib.request.urlopen(imageURL[0]).read()
+                                rawImage = urllib.request.urlopen(request).read()
                             except:
-                                print('Request 4 Failed. Moving onto the Next manga.')
-                                return
+                                print('Request 4 Failed. Moving onto the Next image.')
+                                image_worked = False
 
-
-                fout = open(imageName, 'wb')       
-                fout.write(rawImage)                          
-                fout.close()
+                if image_worked:
+                    fout = open(imageName, 'wb')       
+                    fout.write(rawImage)                          
+                    fout.close()
                         
             chapURL = "http://www.mangapanda.com" + nextPageURL[0]
+
+            #   I will leave this here in case you feel the need to slow down your requests to the website/server
+            # just incase something bad could happen. All you need to do is delete the # 3 lines below  
+            # and the program will sleep for 2 seconds after each page is downloaded. You can add more time if you wish
+            #
+            #time.sleep(2)
+
+        #Time between chapters as well
+        #time.sleep(1)
 
            
             
@@ -763,6 +813,7 @@ def MangaHere(link_to_manga_site):
                     urllibHTML = urllib.request.urlopen(link_to_manga_site).read()
                 except:
                     print('Request 4 Failed. Moving onto the Next manga.')
+                    print('This was the First Main Request that Failed.')
                     return
 
      
@@ -903,6 +954,7 @@ def MangaHere(link_to_manga_site):
                         urllibIMG = str(urllib.request.urlopen(i).read())
                     except:
                         print('Request 4 Failed. Moving onto the Next manga.')
+                        print('This was the Chapter Request that Failed.')
                         return
 
         
@@ -950,6 +1002,7 @@ def MangaHere(link_to_manga_site):
                                 urllibIMG = str(urllib.request.urlopen(urllibReq).read())
                             except:
                                 print('Request 4 Failed. Moving onto the Next manga.')
+                                print('This was the Page Request that Failed.')
                                 return
 
 
@@ -983,6 +1036,8 @@ def MangaHere(link_to_manga_site):
 
                 if fileExists == False:
 
+                    image_worked = True
+
                     try:
                         rawImage = urllib.request.urlopen(imageURL[0]).read()
                     except:
@@ -1004,14 +1059,20 @@ def MangaHere(link_to_manga_site):
                                 try:
                                     rawImage = urllib.request.urlopen(imageURL[0]).read()
                                 except:
-                                    print('Request 4 Failed. Moving onto the Next manga.')
-                                    return
+                                    print('Request 4 Failed. Moving onto the Next image.')
+                                    image_worked = False
 
                     
+                    if image_worked:                   
+                        fout = open(imageName, 'wb')       
+                        fout.write(rawImage)                          
+                        fout.close()
 
-                    fout = open(imageName, 'wb')       
-                    fout.write(rawImage)                          
-                    fout.close()
+            #   I will leave this here in case you feel the need to slow down your requests to the website/server
+            # just incase something bad could happen. All you need to do is delete the # 3 lines below  
+            # and the program will sleep for 2 seconds after each page is downloaded. You can add more time if you wish
+            #
+            #time.sleep(2)
 
     return
 
@@ -1037,17 +1098,31 @@ def MangaStream(link_to_manga_site):
     #Different Manga to the same Mangastream Folder
     os.chdir(MASTERdirectoryName)
 
+    try:
+        urllibHTML = urllib.request.urlopen(link_to_manga_site).read()
+    except:
+        print('Request 1 Failed. Trying again in 30 seconds.')
+        time.sleep(30)
 
-    while True:
         try:
             urllibHTML = urllib.request.urlopen(link_to_manga_site).read()
-            break
-
         except:
-            print()
-            print('Request Failed. Trying again in 10 seconds.')
-            time.sleep(10)
-    
+            print('Request 2 Failed. Trying again in 30 seconds.')
+            time.sleep(30)
+
+            try:
+                urllibHTML = urllib.request.urlopen(link_to_manga_site).read()
+            except:
+                print('Request 3 Failed. Trying again in 30 seconds.')
+                time.sleep(30)
+
+                try:
+                    urllibHTML = urllib.request.urlopen(link_to_manga_site).read()
+                except:
+                    print('Request 4 Failed. Moving onto the Next manga.')
+                    print('This was the First Main Request that Failed.')
+                    return
+       
 
     Manga_Title = re.findall(r'<title>(.*?) Manga', str(urllibHTML))
 
@@ -1068,7 +1143,10 @@ def MangaStream(link_to_manga_site):
     directorySafeName = directorySafeName.replace(":", "")
     directorySafeName = directorySafeName.replace("?", "")
     directorySafeName = directorySafeName.replace("+", " plus ")
-    directorySafeName = directorySafeName.replace("\"","'")
+    directorySafeName = directorySafeName.replace("\"", "'")
+    directorySafeName = directorySafeName.replace("\'", "'")
+    directorySafeName = directorySafeName.replace("\\'", "'")
+    directorySafeName = directorySafeName.replace("\\", "")
     directorySafeName = directorySafeName.replace("%", " Percent ")
     directorySafeName = directorySafeName.replace("<", "")   
     directorySafeName = directorySafeName.replace(">", "")
@@ -1157,15 +1235,30 @@ def MangaStream(link_to_manga_site):
 
         print("Downloading Chapter", chapter_name_string)
 
-        while True:
+        try:
+            urllibHTML = urllib.request.urlopen(chapter_link_string).read()
+        except:
+            print('Request 1 Failed. Trying again in 30 seconds.')
+            time.sleep(30)
+
             try:
                 urllibHTML = urllib.request.urlopen(chapter_link_string).read()
-                break
-
             except:
-                print()
-                print('Request Failed. Trying again in 10 seconds.')
-                time.sleep(10)
+                print('Request 2 Failed. Trying again in 30 seconds.')
+                time.sleep(30)
+
+                try:
+                    urllibHTML = urllib.request.urlopen(chapter_link_string).read()
+                except:
+                    print('Request 3 Failed. Trying again in 30 seconds.')
+                    time.sleep(30)
+
+                    try:
+                        urllibHTML = urllib.request.urlopen(chapter_link_string).read()
+                    except:
+                        print('Request 4 Failed. Moving onto the Next manga.')
+                        print('This was the Chapter Request that Failed.')
+                        return
 
         page_list_raw = re.findall(r'<ul class="dropdown-menu">(.*?)</ul>', str(urllibHTML), re.DOTALL)
 
@@ -1175,11 +1268,11 @@ def MangaStream(link_to_manga_site):
 
         final_page = list_of_some_of_the_pages[-1]
 
-        number_of_pages_list = re.findall(r'http://readms.com/r/.*?/\d+/\d+/(\d+)', final_page)
+        number_of_pages_list = re.findall(r'http://readms.com/r/.*?/.*?/\d+/(\d+)', final_page)
 
         number_of_pages = int(number_of_pages_list[0])
 
-        chapter_url_list = re.findall(r'(http://readms.com/r/.*?/\d+/\d+/)\d+', final_page)
+        chapter_url_list = re.findall(r'(http://readms.com/r/.*?/.*?/\d+/)\d+', final_page)
 
         chapter_url = chapter_url_list[0]
 
@@ -1199,17 +1292,32 @@ def MangaStream(link_to_manga_site):
                 page_urllibHTML = urllibHTML
 
             else:
-                while True:
+                try:
+                    page_urllibHTML = urllib.request.urlopen(chapter_url + str(j+1)).read()
+                except:
+                    print('Request 1 Failed. Trying again in 30 seconds.')
+                    time.sleep(30)
+
                     try:
                         page_urllibHTML = urllib.request.urlopen(chapter_url + str(j+1)).read()
-                        break
-
                     except:
-                        print()
-                        print('Request Failed. Trying again in 10 seconds.')
-                        time.sleep(10)
-                        
+                        print('Request 2 Failed. Trying again in 30 seconds.')
+                        time.sleep(30)
 
+                        try:
+                            page_urllibHTML = urllib.request.urlopen(chapter_url + str(j+1)).read()
+                        except:
+                            print('Request 3 Failed. Trying again in 30 seconds.')
+                            time.sleep(30)
+
+                            try:
+                                page_urllibHTML = urllib.request.urlopen(chapter_url + str(j+1)).read()
+                            except:
+                                print('Request 4 Failed. Moving onto the Next manga.')
+                                print('This was the Page Request that Failed.')
+                                return
+                
+                       
             image_file_name_list = re.findall(r'<img id="manga-page" src="(.*?)"/></a>', str(page_urllibHTML))
 
             image_file_name = image_file_name_list[0]
@@ -1225,25 +1333,54 @@ def MangaStream(link_to_manga_site):
             #If file does not already exist, opens a file, writes image binary data to it and closes
             if fileExists == False:
 
-                while True:
+                image_worked = True
+
+                try:
+                    rawImage = urllib.request.urlopen(image_file_name).read()
+                except:
+                    print('Request 1 Failed. Trying again in 30 seconds.')
+                    time.sleep(30)
+
                     try:
                         rawImage = urllib.request.urlopen(image_file_name).read()
-                        break
-
                     except:
-                        print()
-                        print('Request Failed. Trying again in 10 seconds.')
-                        time.sleep(10)
+                        print('Request 2 Failed. Trying again in 30 seconds.')
+                        time.sleep(30)
 
-                fout = open(imageName, 'wb')       
-                fout.write(rawImage)                          
-                fout.close()
+                        try:
+                            rawImage = urllib.request.urlopen(image_file_name).read()
+                        except:
+                            print('Request 3 Failed. Trying again in 30 seconds.')
+                            time.sleep(30)
 
+                            try:
+                                rawImage = urllib.request.urlopen(image_file_name).read()
+                            except:
+                                print('Request 4 Failed. Moving onto the Next image.')
+                                image_worked = False
+
+                if image_worked:
+                    fout = open(imageName, 'wb')       
+                    fout.write(rawImage)                          
+                    fout.close()
+            
+
+            #
+            #   Here may be a problem. After the program gets done with downloading a single page you may
+            # want to artifically slow the program down so you don't anger the website/server hosts with
+            # too many requests. A small test i did with good internet was 100 downloaded pages (around 4 chapters)
+            # in a minute. Which would have been over 200 urllib requests to mangastream's website in under a minute.
+            #   I will leave this here in case you feel the need to slow down your requests to the website/server
+            # just incase something bad could happen. All you need to do is delete the # 3 lines below  
+            # and the program will sleep for 2 seconds after each page is downloaded. You can add more time if you wish
+            #
+            #time.sleep(2)
 
     return
 
 
 #FULL DOWNLOAD. NO OPTIONS. THIS IS A BOT TO RUN 24/7 TO CHECK FOR UPDATES
+
 
 
 def main():
@@ -1270,12 +1407,17 @@ def main():
 
     Main_Directory = os.getcwd()
 
-    counter = 0
-    
-    
-    #To add more items to any list
-    #'', '', '', '', '', '', '', '', 
 
+
+    counter = 0
+
+    #To add more items to any list
+    #   '', '', '', '', '', '', '', ''
+
+
+    #This is a List to test things/manga/url or anything else
+    #tests_list = ['', 
+    #              '']
 
     batoto_manga = []
 
@@ -1286,8 +1428,16 @@ def main():
     mangastream_manga = []
 
 
-
     while True:
+        
+        #This is a loop to test things/manga/url or anything else
+        #print("Downloading Manga From TEST:\n")
+        #for i in range(len(tests_list)):
+        #    os.chdir(Main_Directory)
+        #   #Change this call to whatever mangasite you are testing
+        #    MangaHere(tests_list[i])
+        #    print('\n')
+
         
         print("Downloading Manga From Batoto:\n")
         for i in range(len(batoto_manga)):
@@ -1328,11 +1478,6 @@ def main():
             counter = 0
             print('\n\nSleeping for 1 Week.\n')
             time.sleep(604800)
-
-
-
-
-
 
 
 
