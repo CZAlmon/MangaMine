@@ -1,4 +1,4 @@
-#Ver. 0.6.0
+#Ver. 0.6.1
 #Authors: Dylan Wise & Zach Almon
 
 import urllib.request
@@ -16,6 +16,8 @@ platformType = platform.system()
 #   Bato.to = 1
 #   Panda = 2
 #   Here = 3
+
+
 
 def Search_Feature(site_number, file_directory):
 
@@ -945,10 +947,16 @@ def Batoto():
                                     fileExists = os.path.isfile(imageName)
                                     #If file does not already exist, opens a file, writes image binary data to it and closes
                                     if fileExists == False:
-                                        rawImage = urllib.request.urlopen(image_file_name).read()
-                                        fout = open(imageName, 'wb')       
-                                        fout.write(rawImage)                          
-                                        fout.close()
+                                        try:
+                                            rawImage = urllib.request.urlopen(image_file_name).read()
+                                            fout = open(imageName, 'wb')       
+                                            fout.write(rawImage)                          
+                                            fout.close()
+
+                                        except:
+                                            print('                           ')
+                                            print("Image download Error!")
+                                            print('Chapter ' + str(chapter_number) + ' Page ' + str(j+1) + ' Cannot be downloaded.')
                             
                             elif type_two_manga == True:
                                 #Get the pages between "<id..." and "</se..."
@@ -997,10 +1005,16 @@ def Batoto():
 
                                         #If file does not already exist, opens a file, writes image binary data to it and closes
                                         if fileExists == False:
-                                            rawImage = urllib.request.urlopen(image_file_name).read()
-                                            fout = open(imageName, 'wb')       
-                                            fout.write(rawImage)                          
-                                            fout.close()
+                                            try:
+                                                rawImage = urllib.request.urlopen(image_file_name).read()
+                                                fout = open(imageName, 'wb')       
+                                                fout.write(rawImage)                          
+                                                fout.close()
+
+                                            except:
+                                                print('                           ')
+                                                print("Image download Error!")
+                                                print('Chapter ' + str(chapter_number) + ' Page ' + str(j+1) + ' Cannot be downloaded.')
 
                                     except:
                                         print("Invalid URL Error, or Connection Timeout!")
@@ -1327,59 +1341,79 @@ def MangaPanda():
                     imageLocation = 0
 
                     while 1:
+
+                        imageLocation += 1
+
+                        #Looks at page URLs for any and all sequences of numbers
+                        nextChapDetermine = re.findall('((?:\d)+)', chapURL)
+
+
                         try:
-                            imageLocation += 1
-
-                            #Looks at page URLs for any and all sequences of numbers
-                            nextChapDetermine = re.findall('((?:\d)+)', chapURL)
-
                             urllibHTML = urllib.request.urlopen(chapURL).read()
+                        except:
+                            print('Chapter URL Error. Cannot download Further.')
+                            return
 
-                            if isFirstLoopPage == True:
-                                determineAmountOfPages = re.findall('<option value="+(.*?)\</option>', str(urllibHTML))
+                           
+                        if isFirstLoopPage == True:
+                            determineAmountOfPages = re.findall('<option value="+(.*?)\</option>', str(urllibHTML))
 
-                            if len(determineAmountOfPages) == imageLocation - 1:
+                        if len(determineAmountOfPages) == imageLocation - 1:
+                            break
+
+                        #Checks the number of files in directory in comparison to the number of images in the chapter
+                        #If the number is the same the assumption is made that all images have been downloaded
+                        if isFirstLoopPage == True:
+                            isFirstLoopPage = False
+                            numOfFileInCWD = len([name for name in os.listdir('.') if os.path.isfile(name)])
+                            if numOfFileInCWD == len(determineAmountOfPages):
                                 break
-
-                            #Checks the number of files in directory in comparison to the number of images in the chapter
-                            #If the number is the same the assumption is made that all images have been downloaded
-                            if isFirstLoopPage == True:
-                                isFirstLoopPage = False
-                                numOfFileInCWD = len([name for name in os.listdir('.') if os.path.isfile(name)])
-                                if numOfFileInCWD == len(determineAmountOfPages):
-                                    break
                         
-                            #grabs both the next page URL and the URL for the image on the current page
-                            URLandIMG = re.findall(r'<div id="imgholder">+(.*?)\" name=+', str(urllibHTML))
-                            nextPageURL = re.findall(r'<a href="+(.*?)\">', URLandIMG[0])
-                            imageURL = re.findall(r'src="+(.*?)\"', URLandIMG[0])
-                            extensionForIMG = re.findall('\.\D[^\.]+', imageURL[0])
+                        #grabs both the next page URL and the URL for the image on the current page
+                        URLandIMG = re.findall(r'<div id="imgholder">+(.*?)\" name=+', str(urllibHTML))
+                        nextPageURL = re.findall(r'<a href="+(.*?)\">', URLandIMG[0])
+                        imageURL = re.findall(r'src="+(.*?)\"', URLandIMG[0])
+                        extensionForIMG = re.findall('\.\D[^\.]+', imageURL[0])
                         
-                            imageName = "Page " + str(imageLocation) + extensionForIMG[-1]
-                            fileExists = os.path.isfile(imageName)
+                        imageName = "Page " + str(imageLocation) + extensionForIMG[-1]
+                        fileExists = os.path.isfile(imageName)
 
-                            #Old code that would put each page thats currently downloading on a new line
-                            #print("Downloading Page", imageLocation) 
+                        #Old code that would put each page thats currently downloading on a new line
+                        #print("Downloading Page", imageLocation) 
 
-                            #New code that will overwrite each "Downloading Page #" with the next page 
-                            #and will eventually be overwrote by the "Downloading Chapter #"
-                            print("Downloading Page %d" % imageLocation, end="", flush=True)
-                            print("\r", end="", flush=True)
+                        #New code that will overwrite each "Downloading Page #" with the next page 
+                        #and will eventually be overwrote by the "Downloading Chapter #"
+                        print("Downloading Page %d" % imageLocation, end="", flush=True)
+                        print("\r", end="", flush=True)
 
-                            #If file does not already exist, opens a file, writes image binary data to it and closes
-                            if fileExists == False:
-                                rawImage = urllib.request.urlopen(imageURL[0]).read()
+                        #If file does not already exist, opens a file, writes image binary data to it and closes
+                        if fileExists == False:
+
+                            user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
+
+                            url = imageURL[0]
+
+                            headers={'User-Agent':user_agent,} 
+
+                            request = urllib.request.Request(imageURL[0],None,headers)
+
+
+                            try:
+                                rawImage = urllib.request.urlopen(request).read()
                                 fout = open(imageName, 'wb')       
                                 fout.write(rawImage)                          
                                 fout.close()
-                        
-                            chapURL = "http://www.mangapanda.com" + nextPageURL[0]
 
-                        #Probably need to do more with this error
-                        except:
-                            print('                           ')
-                            print("Invalid URL Error!")
-                            return
+                            except:
+                                print('                           ')
+                                print("Image download Error!")
+                                print('Chapter ' + str(chapterNames[i]) + ' Page ' + str(imageLocation) + ' Cannot be downloaded.')
+
+
+                        
+                        chapURL = "http://www.mangapanda.com" + nextPageURL[0]
+
+                        
             
                 while 1:
                     print('Do you wish to download another manga?[y/n]')
@@ -1981,10 +2015,16 @@ def MangaHere():
                         fileExists = os.path.isfile(imageName)
 
                         if fileExists == False:
-                            rawImage = urllib.request.urlopen(imageURL[0]).read()
-                            fout = open(imageName, 'wb')       
-                            fout.write(rawImage)                          
-                            fout.close()
+                            try:
+                                rawImage = urllib.request.urlopen(imageURL[0]).read()
+                                fout = open(imageName, 'wb')       
+                                fout.write(rawImage)                          
+                                fout.close()
+
+                            except:
+                                print('                           ')
+                                print("Image download Error!")
+                                print('Volume/Chapter: ' + volChapDirectoryString + ' Page: ' + str(currentPage) + ' Cannot be downloaded.')
         
         while True:
 
@@ -2159,15 +2199,14 @@ def MangaStream():
 
                 print("Downloading Chapter", chapter_name_string)
 
-                while True:
-                    try:
-                        urllibHTML = urllib.request.urlopen(chapter_link_string).read()
-                        break
 
-                    except:
-                        print()
-                        print('Request Failed. Trying again in 10 seconds.')
-                        time.sleep(10)
+                try:
+                    urllibHTML = urllib.request.urlopen(chapter_link_string).read()
+
+                except:
+                    print('Chapter Link Request Failed.')
+                    print('HTML/Site Error')
+                    return
 
                 page_list_raw = re.findall(r'<ul class="dropdown-menu">(.*?)</ul>', str(urllibHTML), re.DOTALL)
 
@@ -2201,17 +2240,15 @@ def MangaStream():
                         page_urllibHTML = urllibHTML
 
                     else:
-                        while True:
-                            try:
-                                page_urllibHTML = urllib.request.urlopen(chapter_url + str(j+1)).read()
-                                break
-
-                            except:
-                                print()
-                                print('Request Failed. Trying again in 10 seconds.')
-                                time.sleep(10)
                         
+                        try:
+                            page_urllibHTML = urllib.request.urlopen(chapter_url + str(j+1)).read()
 
+                        except:
+                            print('Page link Request Failed.')
+                            print('HTML/Site Error')
+
+                        
                     image_file_name_list = re.findall(r'<img id="manga-page" src="(.*?)"/></a>', str(page_urllibHTML))
 
                     image_file_name = image_file_name_list[0]
@@ -2227,19 +2264,17 @@ def MangaStream():
                     #If file does not already exist, opens a file, writes image binary data to it and closes
                     if fileExists == False:
 
-                        while True:
-                            try:
-                                rawImage = urllib.request.urlopen(image_file_name).read()
-                                break
+                        try:
+                            rawImage = urllib.request.urlopen(image_file_name).read()
+                            fout = open(imageName, 'wb')       
+                            fout.write(rawImage)                          
+                            fout.close()
 
-                            except:
-                                print()
-                                print('Request Failed. Trying again in 10 seconds.')
-                                time.sleep(10)
-
-                        fout = open(imageName, 'wb')       
-                        fout.write(rawImage)                          
-                        fout.close()
+                        except:
+                            print('Image download Request Failed.')
+                            print('HTML/Site Error')
+                            print('Image skipped to next image/page\n')
+                            
 
         while 1:
             print('\n')
