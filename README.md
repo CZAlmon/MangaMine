@@ -20,7 +20,7 @@ Images may not work on websites. If they don't the program would crash if it tri
 
   This utility is meant to be run weekly, biweekly or once a month to keep an updated list of all manga for each website available to use instead of haing to find and copy and paste links yourself.
 
-DO NOT ALTER THE DATABASE TEXT FILE. DOING SO WILL BREAK MANGAMINE. ALTER ONLY AT YOUR OWN RISK.
+**DO NOT ALTER THE DATABASE TEXT FILE. DOING SO WILL BREAK MANGAMINE. ALTER ONLY AT YOUR OWN RISK.**
 
 
 ####For the MangaBotDownloader.py:
