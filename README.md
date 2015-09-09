@@ -3,8 +3,9 @@
 Download Manga from 4 different manga hosting websites
 
 
-Latest Update (Aug. 14th):
 
+
+Latest Update (Aug. 14th):
 Images may not work on websites. If they don't the program would crash if it tried to download them. Now if the image fails to download, it will be skipped instead of crashing the program.
 
 
