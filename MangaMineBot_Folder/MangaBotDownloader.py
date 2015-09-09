@@ -1413,6 +1413,18 @@ def main():
 
     #To add more items to any list
     #   '', '', '', '', '', '', '', ''
+    #
+    # Lists must Look like this:
+    #
+    # batoto_manga = ['http://bato.to/comic/_/comics/one-piece-r39']
+    #
+    # with comma's between each link. Links can all be on one line or to make it neater, each link on its own line (See test list)
+    # 
+    # Links must be to the manga's top page of each website. Examples:
+    # Bato: http://bato.to/comic/_/comics/one-piece-r39
+    # MangaPanda: http://www.mangapanda.com/one-piece
+    # MangaStream: http://mangastream.com/manga/one_piece
+    # MangaHere: http://www.mangahere.co/manga/one_piece/
 
 
     #This is a List to test things/manga/url or anything else
@@ -1436,6 +1448,9 @@ def main():
         #    os.chdir(Main_Directory)
         #   #Change this call to whatever mangasite you are testing
         #    MangaHere(tests_list[i])
+        #    #Batoto()
+        #    #MangaPanda()
+        #    #MangaStream()
         #    print('\n')
 
         
