@@ -2310,8 +2310,8 @@ def Main():
             print('Choose a number:', end='\n\n')
             print('1. MangaStream')
             print('2. MangaPanda')
-            print('3. MangaHere')
-            print('4. Batoto', end='\n\n')
+            print('3. MangaHere', end='\n\n')
+            #print('4. Batoto', end='\n\n')
 
             while True:
 
@@ -2331,17 +2331,17 @@ def Main():
                     MangaHere()
                     break
 
-                elif site_input == '4':
-                    Batoto()
-                    break
+                #elif site_input == '4':
+                #    Batoto()
+                #    break
 
                 else:
                     print('Invalid Input.')
                     print('Choose a number:', end='\n\n')
                     print('1. MangaStream')
                     print('2. MangaPanda')
-                    print('3. MangaHere')
-                    print('4. Batoto', end='\n\n')
+                    print('3. MangaHere', end='\n\n')
+                    #print('4. Batoto', end='\n\n')
 
         elif site_input == 'n':
             print('Goodbye.')
