@@ -1453,7 +1453,9 @@ def main():
         #    #MangaStream()
         #    print('\n')
 
-        
+        ### PLEASE READ ###
+        #Batoto has implemented anti-bot crawling measures. I would recommend you find the desired manga on 
+        #   MangaHere or MangaPanda. I will leave this here, but I would recommend leaving the list blank/empty.
         print("Downloading Manga From Batoto:\n")
         for i in range(len(batoto_manga)):
             os.chdir(Main_Directory)
