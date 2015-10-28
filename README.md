@@ -5,11 +5,12 @@ Download Manga from 4 different manga hosting websites
 
 
 
-Latest Update (Aug. 14th):  
+Update (Aug. 14th):  
 Images may not work on websites. If they don't the program would crash if it tried to download them. Now if the image fails to download, it will be skipped instead of crashing the program.
 
-
-
+Latest Updated (Oct. 28th):
+As of 10/25/2015 Batoto has implemented changes that makes it difficult for bots to crawl their website. As of 10/28/2015 I cannot fix or begin to fix the issue to make it work again, so all I have done is take out the option for Batoto in Main, and left the code intact. Some Manga off Batoto may still work, but for the most part this bot does not and cannot detect any manga chapters from the main page, therefore it will just print "Downloading Manga Name" and then "Cannot find any English Chapters". Until I have time to see what changed and see if there is any alternative, Batoto will remain unusable.
+For the manga bot downloader I will not change anything, but I would suggest leaving Batoto's list empty and find it on MangaHere or MangaPanda.
 
 
 ####For the MangaDatabaseIntializer.py:
@@ -26,6 +27,7 @@ Images may not work on websites. If they don't the program would crash if it tri
 ####For the MangaBotDownloader.py:
 
   This is a Bot that will automatically download all the chapters to manga you specify in the lists. It will run 5 times over a 10 hour period (Not including time spent downloading manga. The first time through may take a while since it will download every chapter, from there it will not redownload each chapter/page but update if any new chapters have been uploaded). Then it will sleep for 1 week. Then it will repeat the process to keep manga up to date.
+  ***Batoto may not work anymore. As of 10/25/2015, they have implemented anti-bot measures.***
   
 ####For the Sub_Folder:
 
