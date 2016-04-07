@@ -17,7 +17,7 @@ For the manga bot downloader I will not change anything, but I would suggest lea
   
   You do not have to download and use this utility. If the folder and file are not detected then MangaMine will simply prompt for a link to the top of the manga on whichever site you want to download from. It will give you an example each prompt.
 
-  This utility is meant to be run weekly, biweekly or once a month to keep an updated list of all manga for each website available to use instead of haing to find and copy and paste links yourself.
+  This utility is meant to be run weekly, biweekly or once a month to keep an updated list of all manga for each website available to use instead of having to find and copy and paste links yourself.
 
 **DO NOT ALTER THE DATABASE TEXT FILE. DOING SO WILL BREAK MANGAMINE. ALTER ONLY AT YOUR OWN RISK.**
 
